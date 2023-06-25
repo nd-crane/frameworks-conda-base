@@ -4,7 +4,8 @@
 	"name": "Miniconda demo",
 	"build": { 
 		"context": "..",
-		"dockerfile": "Dockerfile"
+		"dockerfile": "Dockerfile",
+		"args": { "ENABLE_JUPYTERLAB": "true" }  // Set this to "true" to enable Jupyter Lab
 	},
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
@@ -16,9 +17,10 @@
     },
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	// "forwardPorts": []
+	"forwardPorts": [8888],
 
-	
+	// Use 'postCreateCommand' to run commands after the container is created. Comment if using jupyter lab.
+	"postCreateCommand": "conda init",
 
 	// Configure tool-specific properties.
 	"customizations": {
@@ -38,12 +40,17 @@
 				"ms-toolsai.jupyter-renderers",
 				"hamelhusain.nbdev",
 				"GitHub.copilot-nightly",
-				"GitHub.copilot-chat"
+				"GitHub.copilot-chat",
+				"ms-toolsai.vscode-jupyter-slideshow"
 			]
 		}
-	},
-	// Use 'postCreateCommand' to run commands after the container is created.
+	}
+	// Use 'postCreateCommand' to run commands after the container is created. Comment if using jupyter lab.
 	// "postCreateCommand": "conda init"
+
+	// Uncomment to enable jupyter lab
+	// "postCreateCommand": ["conda init", "jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.token=''"]
+
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
 	// "remoteUser": "root"
 }
