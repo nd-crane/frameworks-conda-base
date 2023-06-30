@@ -1,16 +1,13 @@
-# FROM https://github.com/devcontainers/templates/tree/main/src/miniconda
 FROM mcr.microsoft.com/devcontainers/miniconda:0-3
 
-# Add build argument for enabling Jupyter Lab
-ARG ENABLE_JUPYTERLAB="false"
+# Install mamba and use libmamba as dependency solver for conda for faster installs
+RUN conda install -n base -c conda-forge mamba conda-libmamba-solver -y \
+    && conda config --set solver libmamba
 
 # Copy environment.yml (if found) to a temp location so we update the environment. Also
 # copy "noop.txt" so the COPY instruction does not fail if no environment.yml exists.
-RUN conda install -n base -c conda-forge mamba
 COPY environment.yml* .devcontainer/noop.txt /tmp/conda-tmp/
-RUN if [ -f "/tmp/conda-tmp/environment.yml" ]; then umask 0002 && /opt/conda/bin/mamba env create -f /tmp/conda-tmp/environment.yml; fi \
-    && if [ "$ENABLE_JUPYTERLAB" = "true" ]; then /opt/conda/bin/conda install -c conda-forge jupyterlab; fi \
-    && rm -rf /tmp/conda-tmp
+RUN if [ -f "/tmp/conda-tmp/environment.yml" ]; then umask 0002 && /opt/conda/bin/mamba env create -f /tmp/conda-tmp/environment.yml && sudo rm -rf /tmp/conda-tmp; fi
 
 # Install DVC as a pipx tool
 RUN pipx install dvc
@@ -27,7 +24,7 @@ RUN pipx install nbdev
 # RUN pipx install huggingface_hub
 
 # [Optional] Uncomment to install a different version of Python than the default
-# RUN conda install -y python=3.6 \
+# RUN conda install -y python=3.11 \
 #     && pip install --no-cache-dir pipx \
 #     && pipx reinstall-all
 

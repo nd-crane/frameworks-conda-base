@@ -1,12 +1,12 @@
-// For format details, see https://aka.ms/devcontainer.json. For config options, see the
-// README at: https://github.com/devcontainers/templates/tree/main/src/miniconda
-{
-	"name": "Miniconda demo",
-	"build": { 
+/{
+	"name": "Data Science Jupyter Notebooks (Python)",
+    "build": {
 		"context": "..",
-		"dockerfile": "Dockerfile",
-		"args": { "ENABLE_JUPYTERLAB": "true" }  // Set this to "true" to enable Jupyter Lab
-	},
+        "dockerfile": "Dockerfile"
+    },
+
+	"postCreateCommand": "conda init --all",
+	"postAttachCommand": "conda activate myenv",
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	"features": {
@@ -17,40 +17,38 @@
     },
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	"forwardPorts": [8888],
-
-	// Use 'postCreateCommand' to run commands after the container is created. Comment if using jupyter lab.
-	"postCreateCommand": "conda init",
-
+	// "forwardPorts": [],
+	
 	// Configure tool-specific properties.
 	"customizations": {
+		// Configure properties specific to VS Code.
 		"vscode": {
+			// Set *default* container specific settings.json values on container create.
 			"settings": {
-				"python.defaultInterpreterPath": "/opt/conda/envs/TAI_Framework"
+				"[python]": {
+					"defaultInterpreterPath": "/opt/conda/envs/myenv/bin/python",
+					"editor.defaultFormatter": "ms-python.black-formatter",
+					"editor.formatOnType": true,
+					"editor.formatOnSave": true
+				},
+				"[jupyter]": {
+					"themeMatplotlibPlots": true,
+					"widgetScriptSources": [
+						"unpkg.com",
+						"jsdelivr.com"
+					]
+				}
 			},
+			// Add the IDs of extensions you want installed when the container is created.
 			"extensions": [
-				"ms-python.python",
-				"donjayamanne.python-extension-pack",
 				"ms-toolsai.jupyter",
-				"GitHub.codespaces",
-				"ms-azuretools.vscode-docker",
-				"DavidAnson.vscode-markdownlint",
-				"streetsidesoftware.code-spell-checker",
+				"ms-python.python",
+				"ms-python.pylint",
 				"iterative.dvc",
-				"ms-toolsai.jupyter-renderers",
-				"hamelhusain.nbdev",
-				"GitHub.copilot-nightly",
-				"GitHub.copilot-chat",
-				"ms-toolsai.vscode-jupyter-slideshow"
 			]
 		}
-	}
-	// Use 'postCreateCommand' to run commands after the container is created. Comment if using jupyter lab.
-	// "postCreateCommand": "conda init"
+	},
 
-	// Uncomment to enable jupyter lab
-	// "postCreateCommand": ["conda init", "jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.token=''"]
-
-	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	// Set `remoteUser` to `root` to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
 	// "remoteUser": "root"
 }

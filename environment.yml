@@ -5,6 +5,7 @@ dependencies:
   - python=3.11
   - ipykernel # required for jupyter notebook in VS Code
   - dvc # Install dvc for managing data and experiments
+  - nbdev #
 #   - pip  # if you need more packages installed from pip 
 #   - pip:
 #     - foo
